@@ -1,8 +1,8 @@
 #ARM
-#FROM arm64v8/ubuntu:22.04
+FROM arm64v8/ubuntu:22.04
 
 #x86
-FROM ubuntu:22.04
+#FROM ubuntu:22.04
 
 EXPOSE 80
 
@@ -11,6 +11,7 @@ RUN apt-get -y install apache2
 RUN apt-get -y install libapache2-mod-wsgi-py3
 RUN apt-get -y install python3 python3-pip
 RUN apt-get -y install inotify-tools
+RUN apt-get -y install nano 
 
 #load apache cgi module
 RUN a2enmod wsgi cgid

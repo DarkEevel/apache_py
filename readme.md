@@ -10,12 +10,15 @@ Der auf Ubuntu basierende Container kommt mit folgenden Tools vorinstalliert:
 - python3
 - inotify-tools
 - cron
+- nano
 
 `apache2` und `python3` werden für den Webserver benötigt.
 Das Image ist darauf ausgelegt, `.py` und `.cgi` Dateien im Webserver abbilden zu können.
 Da die Dateien aber ausfürbar sein müssen, enthält dieses Image ein Script, welches neue Dateien, 
 welche unter `/var/www/html` angelegt werden, automatisch ausführbar macht. Hierzu wird `inotify-tools` und `cron` benötigt,
 um den Ordner zu überwachen und diese Überwachung bei Containerstart auszuführen. 
+Geändert werden nur die Berechtigungen für `.py` und `.cgi` Dateien.
+
 
 ## Usage
 

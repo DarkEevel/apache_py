@@ -2,5 +2,7 @@
 
 inotifywait -m /var/www/html -e create -e moved_to |
     while read dir action file; do
-        chmod +x /var/www/html/$file
+        if [ "$file" == "*.py" ] || [ "$file" == "*.cgi" ]; then
+            chmod +x /var/www/html/$file
+        fi
     done
