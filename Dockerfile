@@ -18,18 +18,18 @@ RUN service apache2 restart
 
 #enable cgi in the website root
 #second block to allow .htaccess
-COPY apache2.conf /etc/apache2/apache2.conf
+COPY configs/apache2.conf /etc/apache2/apache2.conf
 
 #script for permission change in /var/www/html to execute python files
-COPY alter_permissions.sh /var/tmp/alter_permissions.sh
-COPY alter_permissions_auto.sh /var/tmp/alter_permissions_auto.sh
+COPY scripts/alter_permissions.sh /var/tmp/alter_permissions.sh
+COPY scripts/alter_permissions_auto.sh /var/tmp/alter_permissions_auto.sh
 
 RUN chmod 0744 /var/tmp/alter_permissions.sh
 RUN chmod 0744 /var/tmp/alter_permissions_auto.sh
 
 #add crontab
 RUN apt-get update && apt-get -y install cron
-COPY crontab_alter_permissions /etc/cron.d/crontab_alter_permissions
+COPY configs/crontab_alter_permissions /etc/cron.d/crontab_alter_permissions
 RUN chmod 0644 /etc/cron.d/crontab_alter_permissions
 RUN crontab /etc/cron.d/crontab_alter_permissions
 
