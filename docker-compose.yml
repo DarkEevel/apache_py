@@ -29,4 +29,13 @@ services:
           - //d/docker/apache_stack/html_data:/var/www/html
       ports:
           - '8080:80' # Port 80 IM Container wird auf Port 8080 AUßERHALB des Containers gemappt. http://localhost:8080/
+
+      # !!! ACHTUNG !!!
+
+      # MAC USER mit M1/M2 CPU: 
+      #image: darkx3/apache:py:arm
+
+      # WINDOWS/LINUX USER
+      #image: darkx3/apache_py:x86
+      # or
       image: darkx3/apache_py:latest
