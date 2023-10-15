@@ -2,14 +2,38 @@
 
 Ein Apache Container mit aktiviertem Python3/CGI auf Ubuntu Basis.
 
+## Was ist enthalten
+
+Der auf Ubuntu basierende Container kommt mit folgenden Tools vorinstalliert:
+
+- apache2 + python3-mods
+- python3
+- inotify-tools
+- cron
+
+`apache2` und `python3` werden für den Webserver benötigt.
+Das Image ist darauf ausgelegt, `.py` und `.cgi` Dateien im Webserver abbilden zu können.
+Da die Dateien aber ausfürbar sein müssen, enthält dieses Image ein Script, welches neue Dateien, 
+welche unter `/var/www/html` angelegt werden, automatisch ausführbar macht. Hierzu wird `inotify-tools` und `cron` benötigt,
+um den Ordner zu überwachen und diese Überwachung bei Containerstart auszuführen. 
+
 ## Usage
 
-Einfach eine docker-compose Datei erstellen und die Config nach belieben bearbeiten.
+vorhandene Tags:
+
+`x86`
+`arm`
+
+ARM wir für Mac mit M-Chips empfohlen.
+
+einfach eine docker-compose Datei erstellen und die Config nach belieben bearbeiten.
 
 anschließend mit
+
 ```
 docker-compose up -d
 ```
+
 starten.
 
 
@@ -18,17 +42,6 @@ starten.
 ```
 version: '3'
 services:
-  db:
-    image: mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-    volumes:
-      - //d/docker/mariadb/data:/var/lib/mysql
-    ports:
-      - "3306:3306"
   apache2:
       container_name: apache-py
       environment:
@@ -41,6 +54,9 @@ services:
 
       # Ubuntu Beispiel:
       # /home/user/html:/var/www/html
+
+      # Mac Beispiel:
+      # /Users/username/Desktop/docker/apache/data
 
       # !!! ACHTUNG !!!
       # Unter Windows muss für Python Dateien die EOL auf Unix umgestellt werden, ansonsten kann die Datei nicht gelesen werden.
