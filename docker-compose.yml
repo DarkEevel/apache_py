@@ -38,4 +38,4 @@ services:
       # WINDOWS/LINUX USER
       #image: darkx3/apache_py:x86
       # or
-      image: darkx3/apache_py:latest
+      image: darkx3/apache_py:x86
