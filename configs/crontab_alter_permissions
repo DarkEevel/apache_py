@@ -1,4 +1,3 @@
 # must be ended with a new line "LF" (Unix) and not "CRLF" (Windows)
-@reboot /bin/bash /var/tmp/alter_permissions.sh
 @reboot /bin/bash /var/tmp/alter_permissions_auto.sh
 # An empty line is required at the end of this file for a valid cron file.
