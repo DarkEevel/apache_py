@@ -42,29 +42,47 @@ starten.
 
 ## Docker-Compose
 
-```
+```yaml
 version: '3'
 services:
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - //d/docker/apache_stack/db_data:/var/lib/mysql
+    ports:
+      - "127.0.0.1:3306:3306"
   apache2:
       container_name: apache-py
       environment:
           - TZ=Europe/Berlin
       volumes:
-      # Mappen des html Ordners nach außen auf das Host System:
+          - //d/docker/apache_stack/html_data:/var/www/html       # Mappen des html Ordners nach außen auf das Host System:
 
-      # WSL Beispiel für D:/test
-      # //d/test:/var/www/html
+                                                                  # WSL Beispiel für D:/test
+                                                                  # //d/test:/var/www/html
 
-      # Ubuntu Beispiel:
-      # /home/user/html:/var/www/html
+                                                                  # Ubuntu Beispiel:
+                                                                  # /home/user/html:/var/www/html
 
-      # Mac Beispiel:
-      # /Users/username/Desktop/docker/apache/data
-
-      # !!! ACHTUNG !!!
-      # Unter Windows muss für Python Dateien die EOL auf Unix umgestellt werden, ansonsten kann die Datei nicht gelesen werden.
-          - //d/docker/apache/data:/var/www/html
+                                                                  # !!! ACHTUNG !!!
+                                                                  # Unter Windows muss für Python Dateien die EOL auf Unix umgestellt werden, ansonsten kann die Datei nicht gelesen werden.
       ports:
-          - '8080:80' # Port 80 IM Container wird auf Port 8080 AUßERHALB des Containers gemappt. http://localhost:8080/
-      image: darkx3/apache_py
+        - '127.0.0.1:8080:80'                                     # Port 80 IM Container wird auf Port 8080 AUßERHALB des Containers gemappt. http://localhost:8080/
+                                                                  # 127.0.0.1 wird verwendet, damit der Container lediglich auf der Host Maschine erreichbar ist
+      image: darkx3/apache_py:x86
+      
+                                                                  # !!! ACHTUNG !!!
+
+                                                                  # MAC USER mit M1/M2 CPU: 
+                                                                  #image: darkx3/apache:py:arm
+
+                                                                  # WINDOWS/LINUX USER
+                                                                  #image: darkx3/apache_py:x86
+                                                                  # or
+                                                                  #image: darkx3/apache_py:latest 
 ```
