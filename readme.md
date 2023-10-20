@@ -19,12 +19,22 @@ welche unter `/var/www/html` angelegt werden, automatisch ausführbar macht. Hie
 um den Ordner zu überwachen und diese Überwachung bei Containerstart auszuführen. 
 Geändert werden nur die Berechtigungen für `.py` und `.cgi` Dateien.
 
+Die Container sind lediglich über die Host Maschine erreichbar.
+Geräte aus dem Netzwerk können die Container nicht erreichen.
+Dies wird ermöglicht, in dem der veröffentlichte Port nur für Localhost exposed wird:
+
+```yaml
+ports:
+  - "127.0.0.1:8080:80"
+```
+
 
 ## Usage
 
 vorhandene Tags:
 
 `x86`
+
 `arm`
 
 ARM wir für Mac mit M-Chips empfohlen.
@@ -33,7 +43,7 @@ einfach eine docker-compose Datei erstellen und die Config nach belieben bearbei
 
 anschließend mit
 
-```
+```bash
 docker-compose up -d
 ```
 
@@ -46,6 +56,7 @@ starten.
 version: '3'
 services:
   db:
+    network-mode: "host"
     image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -57,32 +68,38 @@ services:
     ports:
       - "127.0.0.1:3306:3306"
   apache2:
-      container_name: apache-py
-      environment:
-          - TZ=Europe/Berlin
-      volumes:
-          - //d/docker/apache_stack/html_data:/var/www/html       # Mappen des html Ordners nach außen auf das Host System:
+    network-mode: "host"
+    container_name: apache-py
+    environment:
+        - TZ=Europe/Berlin
+    volumes:
+        - //d/docker/apache_stack/html_data:/var/www/html       
+# Mappen des html Ordners nach außen auf das Host System:
 
-                                                                  # WSL Beispiel für D:/test
-                                                                  # //d/test:/var/www/html
+# WSL Beispiel für D:/test
+# //d/test:/var/www/html
 
-                                                                  # Ubuntu Beispiel:
-                                                                  # /home/user/html:/var/www/html
+# Ubuntu Beispiel:
+# /home/user/html:/var/www/html
 
-                                                                  # !!! ACHTUNG !!!
-                                                                  # Unter Windows muss für Python Dateien die EOL auf Unix umgestellt werden, ansonsten kann die Datei nicht gelesen werden.
-      ports:
-        - '127.0.0.1:8080:80'                                     # Port 80 IM Container wird auf Port 8080 AUßERHALB des Containers gemappt. http://localhost:8080/
-                                                                  # 127.0.0.1 wird verwendet, damit der Container lediglich auf der Host Maschine erreichbar ist
-      image: darkx3/apache_py:x86
+# !!! ACHTUNG !!!
+# Unter Windows muss für Python Dateien die EOL auf Unix umgestellt werden, ansonsten kann die Datei nicht gelesen werden.
+
+    ports:
+      - '127.0.0.1:8080:80'
+# Port 80 IM Container wird auf Port 8080 AUßERHALB des Containers gemappt. http://localhost:8080/
+# 127.0.0.1 wird verwendet, damit der Container lediglich auf der Host Maschine und nicht extern erreichbar ist.
+
+    image: darkx3/apache_py:latest
       
-                                                                  # !!! ACHTUNG !!!
+# !!! ACHTUNG !!!
 
-                                                                  # MAC USER mit M1/M2 CPU: 
-                                                                  #image: darkx3/apache:py:arm
+# MAC USER mit M1/M2 CPU: 
+#image: darkx3/apache:py:arm
 
-                                                                  # WINDOWS/LINUX USER
-                                                                  #image: darkx3/apache_py:x86
-                                                                  # or
-                                                                  #image: darkx3/apache_py:latest 
+# WINDOWS/LINUX USER
+#image: darkx3/apache_py:x86
+# or
+#image: darkx3/apache_py:latest 
+
 ```
