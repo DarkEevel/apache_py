@@ -56,7 +56,6 @@ starten.
 version: '3'
 services:
   db:
-    network-mode: "host"
     image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -68,7 +67,6 @@ services:
     ports:
       - "127.0.0.1:3306:3306"
   apache2:
-    network-mode: "host"
     container_name: apache-py
     environment:
         - TZ=Europe/Berlin
