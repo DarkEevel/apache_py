@@ -1,15 +1,16 @@
 #!/bin/bash
 
-WATCH_DIR="/var/www/html"
+WATCH_DIR="/var/www/html/"
+
+find "$WATCH_DIR" -type f -name "*.py" -exec chmod +c {} +
 
 # inotifywait starten und rekursiv nach Dateierstellungsereignissen filtern
-inotifywait -m -r -e create -e moved_to --format "%w%f" "$WATCH_DIR" |
-while read file
+inotifywait -m -r -e modify,create,moved_to --format "%w%f" "$WATCH_DIR" |
+while read newfile
 do
     # Nur Dateien mit der Endung .py berücksichtigen
-    if [[ "$file" == *.py ]] || [[ $file == *.cgi ]]; then
+    if [[ "$newfile" == *.py ]]; then
         # Befehl ausführen: chmod +x
-        chmod +x "$file"
-        echo "Datei $file wurde ausführbar gemacht."
+        chmod +x "$newfile"
     fi
 done
