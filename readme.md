@@ -93,7 +93,7 @@ services:
 # !!! ACHTUNG !!!
 
 # MAC USER mit M1/M2 CPU: 
-#image: darkx3/apache:py:arm
+#image: darkx3/apache_py:arm
 
 # WINDOWS/LINUX USER
 #image: darkx3/apache_py:x86

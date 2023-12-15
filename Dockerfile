@@ -7,7 +7,7 @@ FROM arm64v8/ubuntu:22.04
 EXPOSE 80
 
 RUN apt-get update
-RUN apt-get -y install apache2 libapache2-mod-wsgi-py3 python3 python3-pip inotify-tools nano cron
+RUN apt-get -y install apache2 libapache2-mod-wsgi-py3 python3 python3-pip python3.10-venv inotify-tools nano cron
 
 #load apache cgi module
 RUN a2enmod wsgi cgid

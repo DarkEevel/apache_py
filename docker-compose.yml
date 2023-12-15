@@ -31,7 +31,7 @@ services:
       - '127.0.0.1:8080:80'
 # Port 80 IM Container wird auf Port 8080 AUßERHALB des Containers gemappt. http://localhost:8080/
 # 127.0.0.1 wird verwendet, damit der Container lediglich auf der Host Maschine erreichbar ist
-    image: darkx3/apache_py:x86
+    image: darkx3/apache_py:arm
       
 # !!! ACHTUNG !!!
 
