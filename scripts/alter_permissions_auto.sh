@@ -1,16 +1,26 @@
 #!/bin/bash
 
-WATCH_DIR="/var/www/html/"
+watch_dir="/var/www/html/"
 
-find "$WATCH_DIR" -type f -name "*.py" -exec chmod +c {} +
+make_executable() {
+    permissions=$(stat -c %a $1)
 
-# inotifywait starten und rekursiv nach Dateierstellungsereignissen filtern
-inotifywait -m -r -e modify,create,moved_to --format "%w%f" "$WATCH_DIR" |
-while read newfile
-do
-    # Nur Dateien mit der Endung .py berücksichtigen
-    if [[ "$newfile" == *.py ]]; then
-        # Befehl ausführen: chmod +x
-        chmod +x "$newfile"
+    if [ $permissions != "755" ]; then
+        chmod +x "$1"
+        echo "Permission changed for file $1" >> /var/tmp/py.log
+    else
+        echo "Datei $1 ist bereits ausfühbar"
+    fi
+}
+
+export -f make_executable
+
+find "$watch_dir" -type f -name "*.py" -exec bash -c 'make_executable "$0"' {} \;
+
+inotifywait -m -e modify,create -r --format "%w%f" "$watch_dir" | 
+while read file; do
+    if [[ "$file" == *.py ]]; then
+        sleep 1
+        make_executable "$file"
     fi
 done
